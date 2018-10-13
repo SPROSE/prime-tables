@@ -36,7 +36,7 @@ export default class Primes extends React.Component {
                     <TextInput
                         required={true}
                         value={this.state.primesToGenerate}
-                        label={"Enter prime numbers to generate"}
+                        label={"Enter number of primes to generate"}
                         inputType={"number"}
                         placeholder={"Enter a numeric value"}
                         updateParent={this.updateState}

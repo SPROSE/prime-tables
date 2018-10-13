@@ -28,14 +28,14 @@ export default class TextInput extends React.Component {
                     <input
                         type="text"
                         className={this.state.errorState ? "form-control error" : "form-control"}
-                        value={this.state.value}
+                        value={this.props.value}
                         name={"primesToGenerate"}
                         placeholder={this.props.placeholder}
                         onChange={this.checkInput}
                     />
                     { this.state.errorState ?
                         <div className="alert alert-error">
-                            Please enter a valid {this.props.inputType}.
+                            {this.state.errorMessage}
                         </div>
                         : null
                     }
@@ -44,21 +44,25 @@ export default class TextInput extends React.Component {
         )
     }
 
-    checkInput(value) {
-        let error = false;
-        if (error) {
-            this.setState({
-                errorState: true,
-                errorMessage: "Please enter a valid " + this.props.inputType + "."
-            });
-            this.props.updateParent({primesToGenerate: 0});
-        }
-        else {
+    checkInput(e) {
+        if (this.constructor.validateInput(e.target.value)) {
             this.setState({
                 errorState: false,
                 errorMessage: ""
             });
-            this.props.updateParent({primesToGenerate: value});
+            this.props.updateParent({primesToGenerate: e.target.value});
         }
+        else {
+            this.setState({
+                errorState: true,
+                errorMessage: "Please enter a valid " + this.props.inputType + "."
+            });
+            this.props.updateParent({primesToGenerate: e.target.value});
+        }
+    }
+
+    static validateInput(value) {
+        // Check value is more than 0, contains no decimals
+        return (value > 0 && value % 1 === 0);
     }
 }
