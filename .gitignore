@@ -1,0 +1,11 @@
+# Boilerplate Node.js
+node_modules
+
+# JetBrains and VS Code
+.idea
+
+# Coverage
+coverage
+
+# Builds
+public
