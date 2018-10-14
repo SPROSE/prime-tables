@@ -17,7 +17,7 @@ describe('<Primes /> component', function () {
         instance = wrapper.instance();
     });
 
-    it('Should expect promise to resolve', function () {
+    it('Epected results from loopUntilPrimesToGenerate function', function () {
         const expectedArray = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
         return instance.loopUntilPrimesToGenerate(10)
             .then(response => {
@@ -26,7 +26,7 @@ describe('<Primes /> component', function () {
             })
     });
 
-    it('Should expect promise to resolve', function () {
+    it('Generating 100000 prime numbers - expected to slow the test to around 25 seconds', function () {
         return instance.loopUntilPrimesToGenerate(1000000)
             .then(response => {
                 expect(response).toHaveLength(1000000);

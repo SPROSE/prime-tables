@@ -115,7 +115,7 @@ export default class Primes extends React.Component {
                     </div>
                 </div>
                 <div className={"row"}>
-                { !this.state.loading ?
+                { !this.state.loading && this.state.primeTable.length ?
                     <div className="col-xs-12 table-responsive">
                         <table className="table table-striped">
                             <thead>
