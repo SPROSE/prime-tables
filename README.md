@@ -1,5 +1,6 @@
 React Application for generating a prime table.
 
+How to run:
 Navigate to primes/src/client/ location to view in browser.
 
 I have already bundled up the application with a production build using webpack but if you would like to install node_modules and do so yourself please follow the below instruction:
@@ -14,4 +15,12 @@ For development purposes I also included a command to keep watch on file changes
 
 The development files will be found in src/client/app
 The production bundle will be found in src/client/public
+
+
+What I am pleased with:
+The algorithm to generate primes is efficient - it works by excluding multiples of values as it loops.
+The algorithm can generate 1000000 primes in around 15 seconds.
+
+If I had more time:
+I would work on the render method more to make this perform faster
 
