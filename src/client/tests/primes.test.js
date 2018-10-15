@@ -26,10 +26,21 @@ describe('<Primes /> component', function () {
             })
     });
 
-    it('Generating 100000 prime numbers - expected to slow the test to around 25 seconds', function () {
+    it('Generating 1000000 prime numbers', function () {
         return instance.loopUntilPrimesToGenerate(1000000)
             .then(response => {
                 expect(response).toHaveLength(1000000);
             })
+    });
+
+    it('Generates chunks from the primeTable array so this can be loaded chunk at a time', function () {
+        const arrayOfPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71];
+        expect(instance.constructor.generateChunkedArray(arrayOfPrimes)).toHaveLength(2);
+    });
+
+    it('Show more results - this should + 1 to chunksToShow in state', function () {
+        wrapper.setState({chunksToShow: 1});
+        instance.loadAnotherChunk();
+        expect(instance.state.chunksToShow).toEqual(2);
     });
 });

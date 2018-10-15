@@ -22,5 +22,7 @@ The algorithm to generate primes is efficient - it works by excluding multiples 
 The algorithm can generate 1000000 primes in around 15 seconds.
 
 If I had more time:
-I would work on the render method more to make this perform faster
+I would work on the render method more to make this perform faster.
+I have used array chunking to only display 10 rows - this similar method could be used for the column generation.
+The rows and columns would be better getting generated on user scroll, rather than having to click a button to load more results.
 

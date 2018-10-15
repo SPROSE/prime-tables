@@ -10,6 +10,7 @@ import React from 'react';
 
 // Import classes
 import TextInput from './user-input.jsx';
+import RowsChunk from "./rows-chunk.jsx";
 
 export default class Primes extends React.Component {
     constructor(props) {
@@ -20,6 +21,7 @@ export default class Primes extends React.Component {
             primeNumbers: [],
             primeTable: [],
             primesToGenerate: "",
+            chunksToShow: 0,
             loading: false
         };
 
@@ -27,15 +29,16 @@ export default class Primes extends React.Component {
         this.generatePrimes = this.generatePrimes.bind(this);
         this.generatePrimeTable = this.generatePrimeTable.bind(this);
         this.loopUntilPrimesToGenerate = this.loopUntilPrimesToGenerate.bind(this);
+        this.loadAnotherChunk = this.loadAnotherChunk.bind(this);
         this.updateState = this.updateState.bind(this);
     }
 
     generatePrimes() {
-        const primesToGenerate = Number(this.state.primesToGenerate);
         this.setState({
             loading: true
         });
 
+        const primesToGenerate = Number(this.state.primesToGenerate);
         this.loopUntilPrimesToGenerate(primesToGenerate).then(response => {
             this.generatePrimeTable(response);
         });
@@ -78,46 +81,44 @@ export default class Primes extends React.Component {
 
     generatePrimeTable(primes) {
         let primeTable = [];
-
-
-        primes.map((primeNumberRow, i) => {
+        primes.map((primeNumberRow) => {
             let row = [];
             row.push(primeNumberRow);
-            primes.map((primeNumberColumn, j) => {
+            primes.map((primeNumberColumn) => {
                 row.push(primeNumberRow * primeNumberColumn);
             });
             primeTable.push(row);
         });
+
         this.setState({
             primeNumbers: primes,
             primeTable: primeTable,
+            chunksToShow: 1,
             loading: false
         });
     }
 
-    static generateRows(primeTable) {
-        return primeTable.map((primeNumberRow, j) => {
-            return (
-                <tr key={'primeNumberRow' + j}>
-                    {primeTable[j].map((primeNumberColumn, k) => {
-                        if (k === 0) {
-                            return (
-                                <th key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</th>
-                            )
-                        }
-                        else {
-                            return (
-                                <td key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</td>
-                            )
-                        }
-                    })}
-                </tr>
-            )
+    loadAnotherChunk() {
+        this.setState({
+            chunksToShow: this.state.chunksToShow + 1
         });
     }
 
+    static generateChunkedArray(primeArray) {
+        const chunk =
+            (size, xs) =>
+                xs.reduce(
+                    (segments, _, index) =>
+                        index % size === 0
+                            ? [...segments, xs.slice(index, index + size)]
+                            : segments,
+                    []
+                );
+        return chunk(10, primeArray);
+    }
+
     render() {
-        const rows = this.constructor.generateRows(this.state.primeTable);
+        const chunkPrimeArray = this.constructor.generateChunkedArray(this.state.primeTable);
 
         return (
             <div>
@@ -153,15 +154,25 @@ export default class Primes extends React.Component {
                                 })}
                             </tr>
                             </thead>
-                            <tbody>
-                            {rows}
-                            </tbody>
+                            {chunkPrimeArray.slice(0, this.state.chunksToShow).map((primeArray, j) => {
+                                return (
+                                    <RowsChunk
+                                        key={'chunk' + j}
+                                        primeChunk={primeArray}
+                                    />
+                                )
+                            })}
                         </table>
+                        {chunkPrimeArray.length !== this.state.chunksToShow ?
+                            <button className={"btn btn-default"} onClick={this.loadAnotherChunk}>Load More Results</button>
+                            :
+                            null
+                        }
                     </div>
-                    : this.state.loading ?
-                    <p>Loading table...</p>
-                        :
-                        null
+                    :
+                    <div className={"col-xs-12"}>
+                        <p>When requesting a large amount of primes please wait for the table to generate. The console will show you the prime numbers array.</p>
+                    </div>
                 }
                 </div>
             </div>

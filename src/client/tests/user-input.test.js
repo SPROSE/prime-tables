@@ -1,7 +1,7 @@
 /**
  *  author - richard.sproson
  *  date - 13.10.2018
- *  file - primes.test.jsx
+ *  file - user-input.test.jsx
  *  test - prime number table
  **/
 
