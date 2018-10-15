@@ -68,6 +68,7 @@ export default class Primes extends React.Component {
 
                 // Once we hit the number of primes required, resolve
                 if (primesToGenerate === primeNumbers.length) {
+                    console.log('primeNumbers generated', primeNumbers);
                     resolve(primeNumbers);
                 }
                 i++
@@ -78,10 +79,11 @@ export default class Primes extends React.Component {
     generatePrimeTable(primes) {
         let primeTable = [];
 
-        primes.map((primeNumberRow) => {
+
+        primes.map((primeNumberRow, i) => {
             let row = [];
             row.push(primeNumberRow);
-            primes.map((primeNumberColumn) => {
+            primes.map((primeNumberColumn, j) => {
                 row.push(primeNumberRow * primeNumberColumn);
             });
             primeTable.push(row);
@@ -93,7 +95,30 @@ export default class Primes extends React.Component {
         });
     }
 
+    static generateRows(primeTable) {
+        return primeTable.map((primeNumberRow, j) => {
+            return (
+                <tr key={'primeNumberRow' + j}>
+                    {primeTable[j].map((primeNumberColumn, k) => {
+                        if (k === 0) {
+                            return (
+                                <th key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</th>
+                            )
+                        }
+                        else {
+                            return (
+                                <td key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</td>
+                            )
+                        }
+                    })}
+                </tr>
+            )
+        });
+    }
+
     render() {
+        const rows = this.constructor.generateRows(this.state.primeTable);
+
         return (
             <div>
                 <h1>{this.state.heading}</h1>
@@ -129,29 +154,14 @@ export default class Primes extends React.Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.primeTable.map((primeNumberRow, j) => {
-                                return (
-                                    <tr key={'primeNumberRow' + j}>
-                                        {this.state.primeTable[j].map((primeNumberColumn, k) => {
-                                            if (k === 0) {
-                                                return (
-                                                    <th key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</th>
-                                                )
-                                            }
-                                            else {
-                                                return (
-                                                    <td key={'primeNumberRow' + j + 'primeNumberColumn' + k}>{primeNumberColumn}</td>
-                                                )
-                                            }
-                                        })}
-                                    </tr>
-                                )
-                            })}
+                            {rows}
                             </tbody>
                         </table>
                     </div>
-                    :
+                    : this.state.loading ?
                     <p>Loading table...</p>
+                        :
+                        null
                 }
                 </div>
             </div>
